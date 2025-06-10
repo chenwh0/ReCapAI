@@ -1,0 +1,11 @@
+
+For AI: https://platform.openai.com/docs/tutorials/meeting-minutes
+
+For audio: https://www.assemblyai.com/docs/guides/transcribing-an-audio-file
+
+For UI: https://www.youtube.com/watch?v=pGOyw_M1mNE
+
+For UI: https://stackoverflow.com/questions/76083621/how-to-get-the-upload-file-location-in-gradio
+
+Personal Notes on ChatGPT API:
+https://docs.google.com/document/d/14ByOrO-0oeOa1YQWhIl0r1RPWrpAy9fX9nYaseW-ZGI/edit?usp=sharing
