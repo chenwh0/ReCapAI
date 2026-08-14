@@ -10,3 +10,16 @@ class RecapaiFormat(BaseModel):
     summary: str
     tasks: List[str]
     sentiment: Sentiment    
+
+class RecapResult(BaseModel):
+    recap: RecapaiFormat
+    output_filepath: str
+
+class UserCreate(BaseModel):
+    username: str
+    password: str
+    assemblyai_key: str
+
+class UserLogin(BaseModel):
+    username: str
+    password: str

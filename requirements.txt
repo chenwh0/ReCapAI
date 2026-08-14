@@ -3,6 +3,15 @@ python-dotenv
 requests
 time
 ollama
-docx
+python-docx
 fpdf
 pathlib
+fastapi
+uvicorn
+tempfile
+shutil
+sqlalchemy 
+pyjwt 
+pwdlib[argon2] 
+datetime
+python-multipart

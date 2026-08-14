@@ -2,8 +2,14 @@
 Freshman year's 1st ChatGPT API project &amp; 1st hackathon project (see hackathon award [here](https://devpost.com/software/recapai)). Utilized GPT3.5 LLM to perform summarizing (recapping), sentiment analysis, keypoints extraction, action items extraction of an audio file and save AI responses into a word docx.
 [![image](https://github.com/user-attachments/assets/86fdb327-cf8c-4e2e-bb42-5930adaf563e)](https://youtu.be/vne3Hvarrh8)
 
-# Run
-Run .ipynb file and EarningCalls.wav's full "recap" should be created in your local folder as a file name "recap.docx". 
+# Setup
+1. Copy .env.example → .env
+2. Add your AssemblyAI API key
+3. Choose your Ollama model
+4. Generate a JWT secret:
+   python -c "import secrets; print(secrets.token_urlsafe(32))"
+5. Paste the generated value into JWT_SECRET_KEY
+6. Start FastAPI
 
 # Project Progress
 v1.0.0: Due to the short 2-day time limit at [TigerHacks2023](https://mizzoutigerhacks2023.devpost.com/), the program could only create a recap for 1 specific audio file. Definitely more improvements necessary. *OpenAI has since updated its API, thus, I will also make code changes accordingly

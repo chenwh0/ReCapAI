@@ -1,15 +1,15 @@
 from docx import Document
 from fpdf import FPDF
 from pathlib import Path
-from models.schemas import RecapaiFormat
-def print_recap(recap: RecapaiFormat):
-    """Print formatted recap with headers & newlines
-        Parameters:
-        recap -- RecapaiFormat(dict), Contains summary, key points, tasks, sentiment as keys and their respective content as values
-    """
-    for key, value in recap.model_dump().items():
-        print(key.upper())
-        print(value + "\n\n")
+from ..models.schemas import RecapaiFormat
+
+def export_recap(recap: RecapaiFormat, export_type: str):
+    export_types = {".txt": save_as_txt, ".docx": save_as_docx, ".pdf": save_as_pdf}
+    if export_type in export_types:
+        return export_types[export_type](recap)
+    else: 
+        raise ValueError(f"Unsupported export type: {export_type}")
+
 
 def save_as_txt(recap: RecapaiFormat, file_path="./output_recap/", file_name="recapai"):
     """Save formatted recap with headers & newlines as simple text document(.txt)
@@ -26,8 +26,12 @@ def save_as_txt(recap: RecapaiFormat, file_path="./output_recap/", file_name="re
 
     with open(file_address, "w", encoding="utf-8") as file:
         for key, value in recap.model_dump().items():
-            file.write(key.upper())
-            file.write(value + "\n\n")
+            file.write(f"{key.upper()}\n")
+            if key != "SENTIMENT":
+                file.write(f"{value}\n\n")
+            else:
+                file.write(f"{value.sentiment_label}\n")
+                file.write(f"{value.explanation}\n")
     print(f"Saving {file_name}.txt at {file_path}")
     return file_address
 
@@ -46,21 +50,22 @@ def save_as_docx(recap: RecapaiFormat, file_path="./output_recap/", file_name="r
 
     doc = Document()
     doc.add_heading("SUMMARY", level=1)
-    doc.add_paragraph(recap["summary"])
+    doc.add_paragraph(recap.summary)
     doc.add_paragraph()
 
     doc.add_heading("KEY POINTS", level=1)
-    for point in recap["key_points"]:
+    for point in recap.key_points:
         doc.add_paragraph(point)
     doc.add_paragraph()
 
     doc.add_heading("TASKS", level=1)
-    for task in recap["task"]:
+    for task in recap.task:
         doc.add_paragraph(task)
     doc.add_paragraph()
 
     doc.add_heading("SENTIMENT", level=1)
-    doc.add_paragraph(recap["sentiment"]["explanation"])
+    doc.add_paragraph(recap.sentiment.sentiment_label)
+    doc.add_paragraph(recap.sentiment.explanation)
 
     doc.save(file_address)
     return file_address
@@ -84,11 +89,11 @@ def save_as_pdf(recap: RecapaiFormat, file_path="./output_recap/", file_name="re
         pdf.set_font("Helvetica", style="B", size=32)
         pdf.set_text_color(100, 149, 237) # cornflower blue
         pdf.write(16, f"{key}\n")
-        # Write values (completions) as paragraph text in pdf
+
+        # Write values (responses) as paragraph text in pdf
         pdf.set_font("Helvetica",size=12)
         pdf.set_text_color(0, 0, 0) # black
-        formatted_value = u'%s' % value
-        pdf.write(5, formatted_value)
+        pdf.multi_cell(0, 8, value)
         pdf.write(5, "\n\n")
     pdf.output(file_address)
     return file_address

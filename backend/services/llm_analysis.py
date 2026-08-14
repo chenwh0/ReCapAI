@@ -1,10 +1,8 @@
-import os
 from ollama import chat
-from models.schemas import RecapaiFormat
+from ..models.schemas import RecapaiFormat
 
-MODEL_NAME = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
 
-def llm_analyze(transcript: str) -> RecapaiFormat:
+def llm_analyze(transcript: str, model_name: str) -> RecapaiFormat:
     """Returns a dictionary of the summaries"""
 
     prompt = f"""You are an AI assistant specializing in analyzing conversations. 
@@ -16,7 +14,7 @@ def llm_analyze(transcript: str) -> RecapaiFormat:
     Transcript: "{transcript}"
     """
 
-    completion = chat(model=MODEL_NAME,
+    completion = chat(model=model_name,
                 messages=[{"role": "user", "content": prompt}],
                 format=RecapaiFormat.model_json_schema()
     )

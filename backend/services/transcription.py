@@ -32,13 +32,17 @@ def poll_transcription(polling_endpoint: str, api_key: dict):
         response.raise_for_status()
         transcript_json = response.json()
         if transcript_json["status"] == "completed":
-            return transcript_json["text"]
+            transcript_text = transcript_json["text"]
+            if not transcript_text: 
+                raise ValueError("No transcript generated.")
+            return transcript_text
         elif transcript_json["status"] == "error":
             raise RuntimeError(f"Transcription failed: {transcript_json['error']}")
         else:
             sleep(3)
+    
 
-def transcribe_audio(filepath: str):
+def transcribe_audio(filepath: str, assemblyai_key: str):
     """Transcribe audio file in filepath returns transcript text (str)
     Uses polling technique (as recommended) to check AssemblyAI's transcribing job status every 3 secs.
         
@@ -52,16 +56,16 @@ def transcribe_audio(filepath: str):
     """
     
     # Create API headers & endpoints
-    if not ASSEMBLYAI_API_KEY:
-        raise RuntimeError("Set your ASSEMBLYAI_API_KEY in .env file (use .env.example as template)")
+    if not filepath or not assemblyai_key: 
+        raise ValueError("Audio file & AssemblyAI key required.")
+    
+    aai_api_key = { "authorization": assemblyai_key }
     base_url = "https://api.assemblyai.com/v2"
     upload_to_url = base_url + "/upload"
     transcript_url = base_url + "/transcript"
-    aai_api_key = { "authorization": ASSEMBLYAI_API_KEY }
 
     upload_url = upload_audio(upload_to_url, aai_api_key, filepath)
     # Poll API every 3 sec to check status of transcript job
     poll_endpoint = start_transcription(transcript_url, aai_api_key, { "audio_url": upload_url })
     transcript_text = poll_transcription(poll_endpoint, aai_api_key)
-    
     return transcript_text
