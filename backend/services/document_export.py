@@ -59,7 +59,7 @@ def save_as_docx(recap: RecapaiFormat, file_path="./output_recap/", file_name="r
     doc.add_paragraph()
 
     doc.add_heading("TASKS", level=1)
-    for task in recap.task:
+    for task in recap.tasks:
         doc.add_paragraph(task)
     doc.add_paragraph()
 
@@ -93,6 +93,13 @@ def save_as_pdf(recap: RecapaiFormat, file_path="./output_recap/", file_name="re
         # Write values (responses) as paragraph text in pdf
         pdf.set_font("Helvetica",size=12)
         pdf.set_text_color(0, 0, 0) # black
+        if isinstance(value, list):
+            value = "\n".join(f"- {item}" for item in value)
+        elif isinstance(value, dict):
+            value = "\n".join(str(item) for item in value.values())
+
+        pdf.multi_cell(0, 8, str(value))
+        pdf.ln(5)
         pdf.multi_cell(0, 8, value)
         pdf.write(5, "\n\n")
     pdf.output(file_address)

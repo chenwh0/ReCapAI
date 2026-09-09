@@ -48,13 +48,15 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
     return {"access_token": token, "token_type": "bearer"}
 
 @app.post("/recap", response_model=RecapResult)
-async def recap_audio(audio_file: UploadFile=File(...), current_user: User = Depends(get_current_user), model_name: str = Form(...), export_type: str = Form(...)):
+async def recap_audio(audio_file: UploadFile=File(...), current_user: User = Depends(get_current_user), model_name: str = Form("qwen3:1.7b"), export_type: str = Form(".txt")):
     temp_path = None
     try: 
         with NamedTemporaryFile(delete=False, suffix=Path(audio_file.filename).suffix) as temp_file:
             shutil.copyfileobj(audio_file.file, temp_file)
             temp_path = temp_file.name
         return pipeline.recap(temp_path, current_user.assemblyai_key, model_name, export_type)
+    except HTTPException: 
+        raise
     except Exception as error_message:
         raise HTTPException(status_code=500, detail=str(error_message))
     finally: # Whether success/failed, always delete temp file

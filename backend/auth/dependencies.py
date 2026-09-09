@@ -12,11 +12,11 @@ JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
-def get_current_user(token: str, db: Session=Depends(get_db)) -> User:
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session=Depends(get_db)) -> User:
     """Get the authenticated user from JWT token"""
     credential_exception = HTTPException(status=401, detail="Invalid credentials.", headers={"WWW-Authentication": "Bearer"})
     try:
-        payload = jwt.decode(token, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=JWT_ALGORITHM)
         user_id = payload.get("sub")
         if user_id is None:
             raise credential_exception

@@ -15,3 +15,5 @@ pyjwt
 pwdlib[argon2] 
 datetime
 python-multipart
+pytest
+pypdf

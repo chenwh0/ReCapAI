@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List
 
 class Sentiment(BaseModel):
@@ -16,7 +16,7 @@ class RecapResult(BaseModel):
     output_filepath: str
 
 class UserCreate(BaseModel):
-    username: str
+    username: str = Field(min_length=3, max_length=50)
     password: str
     assemblyai_key: str
 
