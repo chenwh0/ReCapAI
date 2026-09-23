@@ -1,0 +1,159 @@
+@font-face {
+    font-family: "Nabla";
+    src: url("../assets/fonts/Nabla/Nabla-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "BowlbyOne";
+    src: url("../assets/fonts/Bowlby_One/BowlbyOne-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "WorkSans";
+    src: url("../assets/fonts/Work_Sans/WorkSans-VariableFont_wght.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+}
+* {
+    box-sizing: border-box;
+}
+html, #root, body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-size: 1rem;
+    font-family: "WorkSans", sans-serif;
+    color: black;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("/wallpaper.png");
+    background-repeat: repeat; /* Tiles horizontally and vertically */
+    background-size: 600px 650px; /* Optional: sets tile dimensions */
+    opacity: 0.4;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.dashboard {
+    min-height: 100vh;
+    padding: 0% 16%; 
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    margin: 0;
+    padding: 0.8rem;
+    text-align: center;
+    font: normal 5rem "Nabla", sans-serif;
+    text-shadow: 0px 0px 4px rgba(255, 242, 101, 0.8);
+    opacity: 0.8;
+}
+
+
+label {
+    display: grid;
+    grid-auto-flow: row;
+    padding: 0.4rem 0;
+    text-align: left;
+    font-family: "BowlbyOne", sans-serif;
+    color: rgba(0,0,0,0.8);
+    font-size: 2rem;
+    letter-spacing: 0.2em;
+    text-shadow:
+    -3px 0 0 #74a2ed,
+     3px 0 0 #f9ea9e,
+    -2px 2px 0 rgba(121, 124, 255, 0.8),
+     2px 2px 0 rgba(255, 243, 6, 0.8);
+
+    }
+
+input {
+    margin: 2%;
+    padding: 1%;
+    font-family: "WorkSans", sans-serif;
+}
+input::file-selector-button {
+  font-weight: bold;
+  color: #668fd1;
+  padding: 0.5em;
+  border: none;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 4rem;
+}
+input[type="file"]::file-selector-button:hover {
+    border: 1.5px solid black;
+}
+
+select {
+    width: 26%;
+    margin: 2%;
+    align-items: center;
+    padding: 1%;
+    border-radius: 32px;
+    background: rgba(0,0,0,0);
+    color: black;
+    font-family: "WorkSans", sans-serif;
+    background-color: white;
+}
+
+button {
+    --neon: oklch(80% 0.1 265);
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(to bottom, #74a2ed, #f9ea9e);
+    color: white;
+    text-shadow: 0px 0px 8px rgba(255, 243, 108, 0.5);
+    border: 2px solid var(--neon);
+    border-radius: 4rem;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.1s;
+    padding: 0.75rem;
+    font: normal 1.1rem "WorkSans", sans-serif;
+    margin: 0 auto;
+}
+button:hover {
+    box-shadow:
+        0 0 5px var(--neon),
+        0 0 15px var(--neon),
+        0 0 50px var(--neon);
+}
+button:active {
+    transform: scale(0.96);
+    box-shadow:
+        0 0 8px var(--neon),
+        0 0 20px var(--neon);
+}
+
+.error {
+    color: red;
+    font-family: italic 1rem "WorkSans", sans-serif;
+    margin: 0 auto;
+}
+
+
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 1% 5%;
+    }
+    h1 {
+        font-size: 3.5rem;
+    }
+    select {
+        width: 80%;
+    }
+    label {
+        font-size: 1.4rem;
+    }
+}
